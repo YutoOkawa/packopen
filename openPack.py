@@ -1,4 +1,5 @@
 import openpyxl
+import random
 from tqdm import tqdm
 
 from card import Card
@@ -10,6 +11,8 @@ rareCardList = []
 mythicCardList = []
 landCardList = []
 
+# xlsxファイルの読み込み
+# レアリティごとのリスト、全カードリストの作成
 def loadCardList():
     print("\n----- Start Loading CardList -----")
     wb = openpyxl.load_workbook("M21.xlsx")
@@ -32,8 +35,22 @@ def loadCardList():
             landCardList.append(card)
     print("----- Finish Loading CardList -----")
 
+# カード情報の出力
+# 対象のカードリストを入力としランダムなカードを出力する
+def pickCard(cardList):
+    number = random.randrange(len(cardList))
+    card = cardList[number]
+    print(card.rarity, card.name_jp+"/"+card.name_en)
+
+# pack開封モード
 def openPack():
-    pass
+    # Mythicの抽選
+    # 1/8の確率でMythic, そうでなければRare
+    mythic = random.randrange(8)
+    if mythic == 0:
+        pickCard(mythicCardList)
+    else:
+        pickCard(rareCardList)
 
 def main():
     loadCardList()
