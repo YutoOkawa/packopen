@@ -4,14 +4,7 @@ from tqdm import tqdm
 
 from card import Card
 
-allCardList = []
-commonCardList = []
-uncommonCardList = []
-rareCardList = []
-mythicCardList = []
-landCardList = []
-
-def loadCardList():
+def loadCardList(all, cList, uList, rList, mList, lList):
     """
     xlsxファイルの読み込む。
     レアリティごとのリスト、全カードリストを作成する。
@@ -24,17 +17,17 @@ def loadCardList():
         name_en = sheet.cell(row=i,column=2).value
         rarity = sheet.cell(row=i,column=3).value
         card = Card(name_jp, name_en, rarity)
-        allCardList.append(card)
+        all.append(card)
         if card.rarity == "C":
-            commonCardList.append(card)
+            cList.append(card)
         elif card.rarity == "U":
-            uncommonCardList.append(card)
+            uList.append(card)
         elif card.rarity == "R":
-            rareCardList.append(card)
+            rList.append(card)
         elif card.rarity == "M":
-            mythicCardList.append(card)
+            mList.append(card)
         elif card.rarity == "L":
-            landCardList.append(card)
+            lList.append(card)
     print("----- Finish Loading CardList -----")
 
 def pickCard(cardList):
@@ -56,9 +49,27 @@ def pickCard(cardList):
     return card
 
 # pack開封モード
-def openPack():
+def openPack(cList, uList, rList, mList, lList):
     """
-    1パック開封するゲームモードを開始する。
+    1パック開封するゲームモードを開始する
+
+    Parameters
+    ----------
+    cList : list(Card)
+        コモンのカードリスト
+    uList : list(Card)
+        アンコモンのカードリスト
+    rList : list(Card)
+        レアのカードリスト
+    mList : list(Card)
+        神話のカードリスト
+    lList : list(Card)
+        土地のカードリスト
+
+    Returns
+    -------
+    pack : list(Card)
+        作成されたパックの内容
     """
     pack = []
 
@@ -66,15 +77,15 @@ def openPack():
     # 1/8の確率でMythic, そうでなければRare
     rare = random.randrange(8)
     if rare == 0:
-        rareCard = pickCard(mythicCardList)
+        rareCard = pickCard(mList)
     else:
-        rareCard = pickCard(rareCardList)
+        rareCard = pickCard(rList)
     pack.append(rareCard)
 
     # Uncommonの抽選
     # 1パックに3枚
     while len(pack) != 4:
-        ucCard = pickCard(uncommonCardList)
+        ucCard = pickCard(uList)
         if ucCard in pack:
             continue
         pack.append(ucCard)
@@ -82,22 +93,26 @@ def openPack():
     # Commonの抽選
     # レア枠、UC枠、Foil枠、土地枠以外全て
     while len(pack) != 14:
-        cCard = pickCard(commonCardList)
+        cCard = pickCard(cList)
         if cCard in pack:
             continue
         pack.append(cCard)
 
     # Landの抽選
-    landCard = pickCard(landCardList)
+    landCard = pickCard(lList)
     pack.append(landCard)
 
-    # カード情報の出力
-    # packの内容を全て出力
-    for card in pack:
-        card.print()
+    return pack
 
 def main():
-    loadCardList()
+    allCardList = []
+    commonCardList = []
+    uncommonCardList = []
+    rareCardList = []
+    mythicCardList = []
+    landCardList = []
+
+    loadCardList(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
@@ -107,7 +122,9 @@ def main():
         print("input number>", end="")
         check = int(input())
         if check == 1:
-            openPack()
+            pack = openPack(commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
+            for card in pack:
+                card.print()
         elif check == 0:
             print("Thank you for playing!")
             quit()
