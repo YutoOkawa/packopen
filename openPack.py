@@ -11,9 +11,11 @@ rareCardList = []
 mythicCardList = []
 landCardList = []
 
-# xlsxファイルの読み込み
-# レアリティごとのリスト、全カードリストの作成
 def loadCardList():
+    """
+    xlsxファイルの読み込む。
+    レアリティごとのリスト、全カードリストを作成する。
+    """
     print("\n----- Start Loading CardList -----")
     wb = openpyxl.load_workbook("M21.xlsx")
     sheet = wb["シート1"]
@@ -35,15 +37,29 @@ def loadCardList():
             landCardList.append(card)
     print("----- Finish Loading CardList -----")
 
-# カード情報の出力
-# 対象のカードリストを入力とし、その中からランダムなカードを出力する
 def pickCard(cardList):
+    """
+    カードリストからランダムなカードを取得する。
+
+    Parameters
+    ----------
+    cardList : list(Card)
+        対象のカードリスト。
+
+    Returns
+    -------
+    card : Card
+        ランダムに選ばれたカード。
+    """
     number = random.randrange(len(cardList))
     card = cardList[number]
     return card
 
 # pack開封モード
 def openPack():
+    """
+    1パック開封するゲームモードを開始する。
+    """
     pack = []
 
     # Mythicの抽選
@@ -75,9 +91,6 @@ def main():
         elif check == 0:
             print("Thank you for playing!")
             quit()
-
-    # for card in allCardList:
-    #     print(card.rarity, card.name_jp+"/"+card.name_en)
 
 if __name__ == "__main__":
     main()
