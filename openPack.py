@@ -36,21 +36,29 @@ def loadCardList():
     print("----- Finish Loading CardList -----")
 
 # カード情報の出力
-# 対象のカードリストを入力としランダムなカードを出力する
+# 対象のカードリストを入力とし、その中からランダムなカードを出力する
 def pickCard(cardList):
     number = random.randrange(len(cardList))
     card = cardList[number]
-    print(card.rarity, card.name_jp+"/"+card.name_en)
+    return card
 
 # pack開封モード
 def openPack():
+    pack = []
+
     # Mythicの抽選
     # 1/8の確率でMythic, そうでなければRare
-    mythic = random.randrange(8)
-    if mythic == 0:
-        pickCard(mythicCardList)
+    rare = random.randrange(8)
+    if rare == 0:
+        rareCard = pickCard(mythicCardList)
     else:
-        pickCard(rareCardList)
+        rareCard = pickCard(rareCardList)
+    pack.append(rareCard)
+
+    # カード情報の出力
+    # packの内容を全て出力
+    for card in pack:
+        card.print()
 
 def main():
     loadCardList()
