@@ -23,4 +23,4 @@ class Card:
         """
         カード情報を整形して出力する。
         """
-        print(self.rarity, self.name_jp+"/"+sel.name_en)
+        print(self.rarity, self.name_jp+"/"+self.name_en)

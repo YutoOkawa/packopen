@@ -71,6 +71,26 @@ def openPack():
         rareCard = pickCard(rareCardList)
     pack.append(rareCard)
 
+    # Uncommonの抽選
+    # 1パックに3枚
+    while len(pack) != 4:
+        ucCard = pickCard(uncommonCardList)
+        if ucCard in pack:
+            continue
+        pack.append(ucCard)
+
+    # Commonの抽選
+    # レア枠、UC枠、Foil枠、土地枠以外全て
+    while len(pack) != 14:
+        cCard = pickCard(commonCardList)
+        if cCard in pack:
+            continue
+        pack.append(cCard)
+
+    # Landの抽選
+    landCard = pickCard(landCardList)
+    pack.append(landCard)
+
     # カード情報の出力
     # packの内容を全て出力
     for card in pack:
