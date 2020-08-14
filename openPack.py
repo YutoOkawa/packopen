@@ -71,6 +71,8 @@ def openPack(cList, uList, rList, mList, lList):
     pack : list(Card)
         作成されたパックの内容
     """
+
+    print("\nOpen a Pack!")
     pack = []
 
     # Mythicの抽選
@@ -117,17 +119,21 @@ def main():
     print("\nWelcome to Open Pack Simulator!")
     while True:
         print("\nMenu:")
-        print("1:one pack open")
+        print("1:open a pack")
         print("0:exit this program")
         print("input number>", end="")
         check = int(input())
         if check == 1:
             pack = openPack(commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
+            print("---------------------------------------------------------------")
             for card in pack:
                 card.print()
+            print("---------------------------------------------------------------")
         elif check == 0:
-            print("Thank you for playing!")
+            print("\nThank you for playing!")
             quit()
+        else:
+            print("\nError: Unknown Code! Retry input number.")
 
 if __name__ == "__main__":
     main()
