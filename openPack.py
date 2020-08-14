@@ -6,10 +6,15 @@ from card import Card
 
 def loadCardList(all, cList, uList, rList, mList, lList):
     """
-    xlsxファイルの読み込む。
+    カードリストが記述されたxlsxファイルを読み込む。
+    基本土地枠に基本土地でないカードが入る場合、その内容が記述されたファイルを読み込む。
     レアリティごとのリスト、全カードリストを作成する。
     """
     print("\n----- Start Loading CardList -----")
+    with open("notBasicLands.txt") as f:
+        l = [s.strip() for s in f.readlines()]
+        print(l)
+    # TODO:FileNotFoundErrorへの対処
     wb = openpyxl.load_workbook("M21.xlsx")
     sheet = wb["シート1"]
     for i in tqdm(range(2, sheet.max_row+1)):
@@ -19,7 +24,10 @@ def loadCardList(all, cList, uList, rList, mList, lList):
         card = Card(name_jp, name_en, rarity)
         all.append(card)
         if card.rarity == "C":
-            cList.append(card)
+            if card.name_en in l:
+                lList.append(card)
+            else:
+                cList.append(card)
         elif card.rarity == "U":
             uList.append(card)
         elif card.rarity == "R":
