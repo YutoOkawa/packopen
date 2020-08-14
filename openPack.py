@@ -32,7 +32,6 @@ def loadCardList(filename):
     print("\n----- Start Loading CardList -----")
     with open("notBasicLands.txt") as f:
         l = [s.strip() for s in f.readlines()]
-        print(l)
     # TODO:FileNotFoundErrorへの対処
     wb = openpyxl.load_workbook(filename)
     sheet = wb["シート1"]
@@ -100,7 +99,6 @@ def openPack(cList, uList, rList, mList, lList):
         作成されたパックの内容
     """
 
-    print("\nOpen a Pack!")
     pack = []
 
     # Mythicの抽選
@@ -134,6 +132,22 @@ def openPack(cList, uList, rList, mList, lList):
 
     return pack
 
+def printCards(cardList, title):
+    """
+    対象のリストに含まれるカード情報、その題名を出力する
+    Parameters
+    ----------
+    cardList : list(Card)
+        対象のカードリスト
+    title : str
+        出力する題名
+    """
+    print("\n" + title)
+    print("--------------------------------------------------------------------------------------")
+    for card in cardList:
+        card.print()
+    print("--------------------------------------------------------------------------------------")
+
 def main():
     commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("M21.xlsx")
 
@@ -158,26 +172,17 @@ def main():
             continue
         if check == 1:
             pack = openPack(commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
-            print("--------------------------------------------------------------------------------------")
-            for card in pack:
-                card.print()
-            print("--------------------------------------------------------------------------------------")
-            print("You get a nice pack! continue?")
+            printCards(pack, "Open a Pack!")
         elif check == 2:
-            for card in commonCardList:
-                card.print()
+            printCards(commonCardList, "Common Card List")
         elif check == 3:
-            for card in uncommonCardList:
-                card.print()
+            printCards(uncommonCardList, "Uncommon Card List")
         elif check == 4:
-            for card in rareCardList:
-                card.print()
+            printCards(rareCardList, "Rare Card List")
         elif check == 5:
-            for card in mythicCardList:
-                card.print()
+            printCards(mythicCardList, "Mythic Card List")
         elif check == 6:
-            for card in landCardList:
-                card.print()
+            printCards(landCardList, "Land Card List")
         elif check == 0:
             print("\nThank you for playing!")
             quit()
