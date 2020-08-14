@@ -21,6 +21,10 @@ class OpenPackTest(unittest.TestCase):
         """
         testCList, testUList, testRList, testMList, testLList = openPack.loadCardList("test_M21.xlsx")
         self.assertEqual([Card("レインジャーの悪知恵", "Ranger's Guile", "C")], testCList)
+        self.assertEqual([Card("大殺漢", "Goremand", "U")], testUList)
+        self.assertEqual([Card("栄光の頌歌", "Glorious Anthem", "R")], testRList)
+        self.assertEqual([Card("長老ガーガロス", "Elder Gargaroth", "M")], testMList)
+        self.assertEqual([Card("山", "Mountain", "L"), Card("血溜まりの洞窟", "Bloodfell Caves", "C")], testLList)
 
     def test_pickCard(self):
         """
