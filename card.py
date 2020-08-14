@@ -19,6 +19,14 @@ class Card:
         self.name_en = name_en
         self.rarity = rarity
 
+    def __eq__(self, other):
+        """
+        比較演算子の定義
+        """
+        if not isinstance(other, Card):
+            return NotImplemented
+        return self.name_jp == other.name_jp and self.name_en == other.name_en and self.rarity == other.rarity
+
     def print(self):
         """
         カード情報を整形して出力する。

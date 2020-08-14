@@ -4,25 +4,43 @@ from tqdm import tqdm
 
 from card import Card
 
-def loadCardList(all, cList, uList, rList, mList, lList):
+def loadCardList(filename):
     """
     カードリストが記述されたxlsxファイルを読み込む。
     基本土地枠に基本土地でないカードが入る場合、その内容が記述されたファイルを読み込む。
     レアリティごとのリスト、全カードリストを作成する。
+
+    Parameters
+    ----------
+    filename : str
+        読み込む対象のxlsxファイル名
+
+    Returns
+    -------
+    cList : list(Card)
+        コモンのカードリスト
+    uList : list(Card)
+        アンコモンのカードリスト
+    rList : list(Card)
+        レアのカードリスト
+    mList : list(Card)
+        神話のカードリスト
+    lList : list(Card)
+        土地のカードリスト
     """
+    cList, uList, rList, mList, lList = [], [], [], [], []
     print("\n----- Start Loading CardList -----")
     with open("notBasicLands.txt") as f:
         l = [s.strip() for s in f.readlines()]
         print(l)
     # TODO:FileNotFoundErrorへの対処
-    wb = openpyxl.load_workbook("M21.xlsx")
+    wb = openpyxl.load_workbook(filename)
     sheet = wb["シート1"]
     for i in tqdm(range(2, sheet.max_row+1)):
         name_jp = sheet.cell(row=i,column=1).value
         name_en = sheet.cell(row=i,column=2).value
         rarity = sheet.cell(row=i,column=3).value
         card = Card(name_jp, name_en, rarity)
-        all.append(card)
         if card.rarity == "C":
             if card.name_en in l:
                 lList.append(card)
@@ -37,6 +55,8 @@ def loadCardList(all, cList, uList, rList, mList, lList):
         elif card.rarity == "L":
             lList.append(card)
     print("----- Finish Loading CardList -----")
+
+    return cList, uList, rList, mList, lList
 
 def pickCard(cardList):
     """
@@ -115,19 +135,17 @@ def openPack(cList, uList, rList, mList, lList):
     return pack
 
 def main():
-    allCardList = []
-    commonCardList = []
-    uncommonCardList = []
-    rareCardList = []
-    mythicCardList = []
-    landCardList = []
-
-    loadCardList(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
+    commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("M21.xlsx")
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
         print("\nMenu List-----------------------------------------------------------------------------")
         print("1:open a pack")
+        print("2:show all common cards")
+        print("3:show all uncommon cards")
+        print("4:show all rare cards")
+        print("5:show all mythic cards")
+        print("6:show all land cards")
         print("0:exit this program")
         print("--------------------------------------------------------------------------------------")
         print("input number>", end="")
@@ -145,6 +163,21 @@ def main():
                 card.print()
             print("--------------------------------------------------------------------------------------")
             print("You get a nice pack! continue?")
+        elif check == 2:
+            for card in commonCardList:
+                card.print()
+        elif check == 3:
+            for card in uncommonCardList:
+                card.print()
+        elif check == 4:
+            for card in rareCardList:
+                card.print()
+        elif check == 5:
+            for card in mythicCardList:
+                card.print()
+        elif check == 6:
+            for card in landCardList:
+                card.print()
         elif check == 0:
             print("\nThank you for playing!")
             quit()
