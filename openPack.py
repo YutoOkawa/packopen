@@ -118,10 +118,10 @@ def main():
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
-        print("\nMenu List------------------------------------------------------")
+        print("\nMenu List-----------------------------------------------------------------------------")
         print("1:open a pack")
         print("0:exit this program")
-        print("---------------------------------------------------------------")
+        print("--------------------------------------------------------------------------------------")
         print("input number>", end="")
         try:
             check = int(input())
@@ -132,10 +132,10 @@ def main():
             continue
         if check == 1:
             pack = openPack(commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
-            print("---------------------------------------------------------------")
+            print("--------------------------------------------------------------------------------------")
             for card in pack:
                 card.print()
-            print("---------------------------------------------------------------")
+            print("--------------------------------------------------------------------------------------")
             print("You get a nice pack! continue?")
         elif check == 0:
             print("\nThank you for playing!")
