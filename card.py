@@ -21,11 +21,17 @@ class Card:
 
     def __eq__(self, other):
         """
-        比較演算子の定義
+        比較演算子==の定義
         """
         if not isinstance(other, Card):
             return NotImplemented
         return self.name_jp == other.name_jp and self.name_en == other.name_en and self.rarity == other.rarity
+
+    def __hash__(self):
+        """
+        ハッシュ化可能識別子
+        """
+        return hash(self.name_jp) ^ hash(self.name_en) ^ hash(self.rarity)
 
     def print(self):
         """
