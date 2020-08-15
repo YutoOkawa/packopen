@@ -31,7 +31,7 @@ class OpenPackTest(unittest.TestCase):
         pickCardの単体テスト
         """
         testCard = Card("山", "Mountain", "L")
-        testCardList = [testCard]
+        testCardList = [Card("山", "Mountain", "L")]
         self.assertEqual(testCard, openPack.pickCard(testCardList))
 
     def test_openPack(self):
