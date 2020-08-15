@@ -43,6 +43,7 @@ class Card:
         print(self.rarity, self.name_jp+"/"+self.name_en, end="")
         if self.foiled:
             print(" [Foil]")
+            self.foiled = False
         else:
             print()
 
