@@ -68,14 +68,15 @@ def pickCard(cardList, rand):
     ----------
     cardList : list(Card)
         対象のカードリスト。
+    rand : int
+        乱数値
 
     Returns
     -------
     card : Card
         ランダムに選ばれたカード。
     """
-    number = random.randrange(len(cardList))
-    card = cardList[number]
+    card = cardList[rand]
     return card
 
 # pack開封モード
