@@ -60,7 +60,7 @@ def loadCardList(filename):
 
     return all, cList, uList, rList, mList, lList
 
-def pickCard(cardList):
+def pickCard(cardList, rand):
     """
     カードリストからランダムなカードを取得する。
 
@@ -79,7 +79,7 @@ def pickCard(cardList):
     return card
 
 # pack開封モード
-def openPack(all, cList, uList, rList, mList, lList):
+def openPack(all, cList, uList, rList, mList, lList, rand_foil, rand_mythic):
     """
     1パック開封するゲームモードを開始する
 
@@ -97,6 +97,10 @@ def openPack(all, cList, uList, rList, mList, lList):
         神話のカードリスト
     lList : list(Card)
         土地のカードリスト
+    rand_foil : int
+        フォイルの抽選乱数
+    rand_mythic : int
+        神話レアの抽選乱数
 
     Returns
     -------
@@ -106,26 +110,26 @@ def openPack(all, cList, uList, rList, mList, lList):
 
     pack = []
 
-    foil = random.randrange(3)
-    if foil == 0:
-        foilCard = pickCard(all)
+    # Foilの抽選
+    # 1/3の確率でFoilが封入
+    if rand_foil == 0:
+        foilCard = pickCard(all, random.randrange(len(all)))
         foilCard.setFoiled(True)
         pack.append(foilCard)
 
     # Mythicの抽選
     # 1/8の確率でMythic, そうでなければRare
-    rare = random.randrange(8)
-    if rare == 0:
-        rareCard = pickCard(mList)
+    if rand_mythic == 0:
+        rareCard = pickCard(mList, random.randrange(len(mList)))
     else:
-        rareCard = pickCard(rList)
+        rareCard = pickCard(rList, random.randrange(len(rList)))
     pack.append(rareCard)
 
     # Uncommonの抽選
     # 1パックに3枚
     uc_i = 0
     while uc_i != 3:
-        ucCard = pickCard(uList)
+        ucCard = pickCard(uList, random.randrange(len(uList)))
         if ucCard in pack:
             continue
         pack.append(ucCard)
@@ -134,13 +138,13 @@ def openPack(all, cList, uList, rList, mList, lList):
     # Commonの抽選
     # レア枠、UC枠、Foil枠、土地枠以外全て
     while len(pack) != 14:
-        cCard = pickCard(cList)
+        cCard = pickCard(cList, random.randrange(len(cList)))
         if cCard in pack:
             continue
         pack.append(cCard)
 
     # Landの抽選
-    landCard = pickCard(lList)
+    landCard = pickCard(lList, random.randrange(len(lList)))
     pack.append(landCard)
 
     return pack
@@ -185,8 +189,7 @@ def main():
             print("Retry input number.")
             continue
         if check == 1:
-            # TODO: 乱数値設定を外部にする(テストを容易にするため)
-            pack = openPack(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
+            pack = openPack(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList, random.randrange(3), random.randrange(8))
             printCards(pack, "Open a Pack!")
         elif check == 2:
             printCards(commonCardList, "Common Card List")
