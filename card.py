@@ -52,3 +52,21 @@ class Card:
         Foiledのsetter
         """
         self.foiled = foiled
+
+    def getName_jp(self):
+        """
+        name_jpのgetter
+        """
+        return self.name_jp
+
+    def getName_en(self):
+        """
+        name_enのsetter
+        """
+        return self.name_en
+
+    def getRarity(self):
+        """
+        rarityのgetter
+        """
+        return self.rarity
