@@ -17,6 +17,8 @@ def loadCardList(filename):
 
     Returns
     -------
+    all : list(Card)
+        全てのカードリスト
     cList : list(Card)
         コモンのカードリスト
     uList : list(Card)
@@ -28,7 +30,7 @@ def loadCardList(filename):
     lList : list(Card)
         土地のカードリスト
     """
-    cList, uList, rList, mList, lList = [], [], [], [], []
+    all, cList, uList, rList, mList, lList = [], [], [], [], [], []
     print("\n----- Start Loading CardList -----")
     with open("notBasicLands.txt") as f:
         l = [s.strip() for s in f.readlines()]
@@ -40,6 +42,7 @@ def loadCardList(filename):
         name_en = sheet.cell(row=i,column=2).value
         rarity = sheet.cell(row=i,column=3).value
         card = Card(name_jp, name_en, rarity)
+        all.append(card)
         if card.rarity == "C":
             if card.name_en in l:
                 lList.append(card)
@@ -55,7 +58,7 @@ def loadCardList(filename):
             lList.append(card)
     print("----- Finish Loading CardList -----")
 
-    return cList, uList, rList, mList, lList
+    return all, cList, uList, rList, mList, lList
 
 def pickCard(cardList):
     """
@@ -76,12 +79,14 @@ def pickCard(cardList):
     return card
 
 # pack開封モード
-def openPack(cList, uList, rList, mList, lList):
+def openPack(all, cList, uList, rList, mList, lList):
     """
     1パック開封するゲームモードを開始する
 
     Parameters
     ----------
+    all : list(Card)
+        全てのカードリスト
     cList : list(Card)
         コモンのカードリスト
     uList : list(Card)
@@ -149,7 +154,7 @@ def printCards(cardList, title):
     print("--------------------------------------------------------------------------------------")
 
 def main():
-    commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("M21.xlsx")
+    allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("M21.xlsx")
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
@@ -160,6 +165,7 @@ def main():
         print("4:show all rare cards")
         print("5:show all mythic cards")
         print("6:show all land cards")
+        print("7:show all cards")
         print("0:exit this program")
         print("--------------------------------------------------------------------------------------")
         print("input number>", end="")
@@ -171,7 +177,7 @@ def main():
             print("Retry input number.")
             continue
         if check == 1:
-            pack = openPack(commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
+            pack = openPack(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
             printCards(pack, "Open a Pack!")
         elif check == 2:
             printCards(commonCardList, "Common Card List")
@@ -183,6 +189,8 @@ def main():
             printCards(mythicCardList, "Mythic Card List")
         elif check == 6:
             printCards(landCardList, "Land Card List")
+        elif check == 7:
+            printCards(allCardList, "All Card List")
         elif check == 0:
             print("\nThank you for playing!")
             quit()

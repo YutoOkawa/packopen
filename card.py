@@ -10,6 +10,8 @@ class Card:
         カードの英語名。
     rarity : str
         カードのレアリティ。
+    foiled : bool
+        Foilであるかどうか。
     """
     def __init__(self, name_jp, name_en, rarity):
         """
@@ -18,6 +20,7 @@ class Card:
         self.name_jp = name_jp
         self.name_en = name_en
         self.rarity = rarity
+        self.foiled = False
 
     def __eq__(self, other):
         """
@@ -37,4 +40,8 @@ class Card:
         """
         カード情報を整形して出力する。
         """
-        print(self.rarity, self.name_jp+"/"+self.name_en)
+        print(self.rarity, self.name_jp+"/"+self.name_en, end="")
+        if self.foiled:
+            print(" [Foil]")
+        else:
+            print()
