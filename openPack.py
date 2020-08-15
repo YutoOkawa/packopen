@@ -106,6 +106,12 @@ def openPack(all, cList, uList, rList, mList, lList):
 
     pack = []
 
+    foil = random.randrange(3)
+    if foil == 0:
+        foilCard = pickCard(all)
+        foilCard.setFoiled(True)
+        pack.append(foilCard)
+
     # Mythicの抽選
     # 1/8の確率でMythic, そうでなければRare
     rare = random.randrange(8)
@@ -117,11 +123,13 @@ def openPack(all, cList, uList, rList, mList, lList):
 
     # Uncommonの抽選
     # 1パックに3枚
-    while len(pack) != 4:
+    uc_i = 0
+    while uc_i != 3:
         ucCard = pickCard(uList)
         if ucCard in pack:
             continue
         pack.append(ucCard)
+        uc_i+=1
 
     # Commonの抽選
     # レア枠、UC枠、Foil枠、土地枠以外全て
@@ -177,6 +185,7 @@ def main():
             print("Retry input number.")
             continue
         if check == 1:
+            # TODO: 乱数値設定を外部にする(テストを容易にするため)
             pack = openPack(allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList)
             printCards(pack, "Open a Pack!")
         elif check == 2:

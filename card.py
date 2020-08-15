@@ -45,3 +45,9 @@ class Card:
             print(" [Foil]")
         else:
             print()
+
+    def setFoiled(self, foiled):
+        """
+        Foiledのsetter
+        """
+        self.foiled = foiled
