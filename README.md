@@ -11,8 +11,11 @@ pip install -r requirement.txt
 ## Usage
 ### openPack simulator
 ```Bash
-python openPack.py
+python openPack.py [CardList].xlsx
 ```
+### Caution!
+[CardList].xlsx MUST be in /public directory.
+
 ### UnitTest
 ```Bash
 python -m unittest

@@ -1,6 +1,8 @@
 import openpyxl
-import random
 from tqdm import tqdm
+
+import random
+import sys
 
 from card import Card
 
@@ -45,7 +47,6 @@ def loadCardList(filename):
     try:
         wb = openpyxl.load_workbook(filename)
     except FileNotFoundError as e:
-        print("xlsx file does not found.")
         return all, cList, uList, rList, mList, lList
     sheets = wb.sheetnames
     sheet = wb[sheets[0]]
@@ -194,7 +195,16 @@ def printCards(cardList, title):
     print("--------------------------------------------------------------------------------------")
 
 def main():
-    allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("./public/M21.xlsx")
+    if len(sys.argv) != 2:
+        print("Usage: python openPack.py [CardList].xlsx")
+        quit()
+
+    # カードリストの読み込み
+    filename = sys.argv[1]
+    allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("./public/" + filename)
+    if allCardList == []:
+        print("xlsx file does not found! Retry input file.")
+        quit()
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
