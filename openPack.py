@@ -34,7 +34,7 @@ def loadCardList(filename):
     print("\n----- Start Loading CardList -----")
     # 基本でない土地枠の読み込み
     try :
-        with open("notBasicLands.txt") as f:
+        with open("./public/notBasicLands.txt") as f:
             print("loading notBasicLands.")
             l = [s.strip() for s in f.readlines()]
     except FileNotFoundError as e:
@@ -194,7 +194,7 @@ def printCards(cardList, title):
     print("--------------------------------------------------------------------------------------")
 
 def main():
-    allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("M21.xlsx")
+    allCardList, commonCardList, uncommonCardList, rareCardList, mythicCardList, landCardList = loadCardList("./public/M21.xlsx")
 
     print("\nWelcome to Open Pack Simulator!")
     while True:
