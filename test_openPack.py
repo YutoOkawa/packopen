@@ -19,6 +19,7 @@ class OpenPackTest(unittest.TestCase):
         """
         loadCardListの単体テスト
         """
+        # 成功ケース
         testAllList, testCList, testUList, testRList, testMList, testLList = openPack.loadCardList("test_M21.xlsx")
         self.assertEqual([Card("レインジャーの悪知恵", "Ranger's Guile", "C")], testCList)
         self.assertEqual([Card("大殺漢", "Goremand", "U")], testUList)
@@ -26,13 +27,26 @@ class OpenPackTest(unittest.TestCase):
         self.assertEqual([Card("長老ガーガロス", "Elder Gargaroth", "M")], testMList)
         self.assertEqual([Card("山", "Mountain", "L"), Card("血溜まりの洞窟", "Bloodfell Caves", "C")], testLList)
 
+        # 失敗ケース
+        failedAll, failedCList, failedUList, failedRList, failedMList, failedLList = openPack.loadCardList("NOTFOUND.xlsx")
+        self.assertEqual([],failedAll)
+        self.assertEqual([], failedCList)
+        self.assertEqual([], failedUList)
+        self.assertEqual([], failedRList)
+        self.assertEqual([], failedMList)
+        self.assertEqual([], failedLList)
+
     def test_pickCard(self):
         """
         pickCardの単体テスト
         """
+        # 成功ケース
         testCard = Card("山", "Mountain", "L")
         testCardList = [Card("山", "Mountain", "L")]
         self.assertEqual(testCard, openPack.pickCard(testCardList, 0))
+
+        #失敗ケース
+        self.assertEqual(None, openPack.pickCard(testCardList, 100000))
 
     def test_openPack(self):
         """

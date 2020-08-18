@@ -32,11 +32,23 @@ def loadCardList(filename):
     """
     all, cList, uList, rList, mList, lList = [], [], [], [], [], []
     print("\n----- Start Loading CardList -----")
-    with open("notBasicLands.txt") as f:
-        l = [s.strip() for s in f.readlines()]
-    # TODO:FileNotFoundErrorへの対処
-    wb = openpyxl.load_workbook(filename)
-    sheet = wb["シート1"]
+    # 基本でない土地枠の読み込み
+    try :
+        with open("notBasicLands.txt") as f:
+            print("loading notBasicLands.")
+            l = [s.strip() for s in f.readlines()]
+    except FileNotFoundError as e:
+        print("only basic land.")
+        l = []
+
+    # カードリスト読み込み
+    try:
+        wb = openpyxl.load_workbook(filename)
+    except FileNotFoundError as e:
+        print("xlsx file does not found.")
+        return all, cList, uList, rList, mList, lList
+    sheets = wb.sheetnames
+    sheet = wb[sheets[0]]
     for i in tqdm(range(2, sheet.max_row+1)):
         name_jp = sheet.cell(row=i,column=1).value
         name_en = sheet.cell(row=i,column=2).value
@@ -76,7 +88,11 @@ def pickCard(cardList, rand):
     card : Card
         ランダムに選ばれたカード。
     """
-    card = cardList[rand]
+    try:
+        card = cardList[rand]
+    except IndexError as e:
+        print(e)
+        card = None
     return card
 
 # pack開封モード
@@ -115,8 +131,9 @@ def openPack(all, cList, uList, rList, mList, lList, rand_foil, rand_mythic):
     # 1/3の確率でFoilが封入
     if rand_foil == 0:
         foilCard = pickCard(all, random.randrange(len(all)))
-        foilCard.setFoiled(True)
-        pack.append(foilCard)
+        if foilCard != None:
+            foilCard.setFoiled(True)
+            pack.append(foilCard)
 
     # Mythicの抽選
     # 1/8の確率でMythic, そうでなければRare
@@ -124,31 +141,41 @@ def openPack(all, cList, uList, rList, mList, lList, rand_foil, rand_mythic):
         rareCard = pickCard(mList, random.randrange(len(mList)))
     else:
         rareCard = pickCard(rList, random.randrange(len(rList)))
-    pack.append(rareCard)
+    if rareCard != None:
+        pack.append(rareCard)
 
     # Uncommonの抽選
     # 1パックに3枚
     uc_i = 0
     while uc_i != 3:
         ucCard = pickCard(uList, random.randrange(len(uList)))
+        # 同じカードが抽選された場合はやり直し
         if ucCard in pack:
             continue
-        pack.append(ucCard)
+        if ucCard != None:
+            pack.append(ucCard)
         uc_i+=1
 
     # Commonの抽選
     # レア枠、UC枠、Foil枠、土地枠以外全て
     while len(pack) != 14:
         cCard = pickCard(cList, random.randrange(len(cList)))
+        # 同じカードが抽選された場合はやり直し
         if cCard in pack:
             continue
-        pack.append(cCard)
+        if cCard != None:
+            pack.append(cCard)
 
     # Landの抽選
     landCard = pickCard(lList, random.randrange(len(lList)))
-    pack.append(landCard)
+    if landCard != None:
+        pack.append(landCard)
 
-    return pack
+    if len(pack) != 15:
+        print("Failed to create pack!")
+        return []
+    else:
+        return pack
 
 def printCards(cardList, title):
     """
