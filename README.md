@@ -1,3 +1,6 @@
+# Congratulation!
+第2回 Sekappy プログラミングチャレンジにて優秀賞をいただきました！
+[マジック×プログラム プログラミングチャレンジ 結果発表](https://sekappy.com/blog/2238)
 # Magic: The Gathering BoosterPack Simulator
 
 ## install dependencies
